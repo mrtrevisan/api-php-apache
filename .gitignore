@@ -1,0 +1,6 @@
+.DS_Store
+.vscode
+vendor/
+logs/
+.env
+.env*
