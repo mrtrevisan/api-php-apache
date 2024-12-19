@@ -1,16 +1,41 @@
 <?php
 
-header('Content-Type: application/json');
+use Utils\Request;
+use Utils\Response;
 
-$method = $_SERVER['REQUEST_METHOD'];
-$requestUri = $_SERVER['REQUEST_URI'];
-$path = str_replace(["index.php/", "index.php"], "", parse_url($requestUri, PHP_URL_PATH));
+require_once "../vendor/autoload.php";
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'\/../');
+$dotenv->safeLoad();
 
-echo json_encode([
-    "method" => $method,
-    "url" => $requestUri,
-    "path" => $path
-]);
+require_once "./Library/Utils/Request.php";
+require_once "./Library/Utils/Response.php";
 
+$controllers_files = glob(__DIR__.'/Controllers/*.php');
+foreach ($controllers_files as $c) {
+    require_once $c;
+}
+
+$request = new Request();
+$response = new Response();
+
+if (count($request->params) >= 2) {
+    $controller_name = "Controllers\\" . ucfirst($request->params[1]) . 'Controller';
+} else {
+    $controller_name = "";
+}
+
+if (class_exists($controller_name)) {
+    $controller = new $controller_name();
+    $controller->handle($request, $response);
+} else {
+    $response->setCode(404);
+    $response->setData([
+        'error' => "Controller not Found"
+    ]);
+}
+
+header('Content-Type: application/json; charset=utf8');
+http_response_code($response->code);
+echo json_encode($response->data);
 ?>
