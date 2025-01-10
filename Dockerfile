@@ -1,9 +1,8 @@
-FROM php:8.4-apache
+FROM php:8.4-fpm-alpine
 
 # Install dependencies
-RUN apt-get update -y && \
-    apt-get upgrade -y && \
-    apt-get install -y \
+RUN apk update && \
+    apk add \
     zip unzip
 
 RUN docker-php-ext-install pdo pdo_mysql
@@ -18,3 +17,5 @@ RUN composer install --ignore-platform-reqs
 
 # .env file
 COPY ./etc/config/.env /var/www/.env
+
+CMD [ "php-fpm" ]

@@ -1,14 +1,10 @@
 services:
-  php-api:
-    container_name: php-api
+  php-fpm:
+    container_name: php-fpm
     build:
       context: .
     volumes:
       - ./api:/var/www/html
-    ports:
-      - "80"
-    expose:
-      - "80"
     networks:
       - internal
 
@@ -20,7 +16,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - php-api
+      - php-fpm
     networks:
       - internal
       - traefik-proxy
