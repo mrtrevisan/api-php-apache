@@ -1,17 +1,9 @@
-### PHP Apache Web Server and Nginx Proxy
+### PHP-FPM Web API
 
 ### How it Works
-Static files (HTML, CSS, JS) served from Nginx:  
--> public folder is ```app/```
+Uses Nginx as a proxy server;
 
-Api requests are forwarded and handled by Apache Server (PHP):  
--> entrypoint is ```api/index.php```
+Api requests (under the /api prefix) are forwarded to the PHP-FPM;
 
 ### Dependencies
 - Docker
-
-### How to use:
-Run:  
-```
-docker compose up --build
-```
