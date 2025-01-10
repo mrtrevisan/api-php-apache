@@ -11,13 +11,13 @@ $dotenv->safeLoad();
 require_once "./Library/Utils/Request.php";
 require_once "./Library/Utils/Response.php";
 
+$request = new Request();
+$response = new Response();
+
 $controllers_files = glob(__DIR__.'/Controllers/*.php');
 foreach ($controllers_files as $c) {
     require_once $c;
 }
-
-$request = new Request();
-$response = new Response();
 
 if (count($request->params) >= 2) {
     $controller_name = "Controllers\\" . ucfirst($request->params[1]) . 'Controller';

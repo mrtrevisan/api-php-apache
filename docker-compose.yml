@@ -1,6 +1,6 @@
 services:
-  apache-server:
-    container_name: apache-php-server
+  php-api:
+    container_name: php-api
     build:
       context: .
     volumes:
@@ -12,16 +12,15 @@ services:
     networks:
       - internal
 
-  nginx-server:
+  nginx-proxy:
     container_name: nginx-proxy
     image: nginx:latest
     volumes:
       - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./app:/var/www/html
     ports:
       - "8080:8080"
     depends_on:
-      - apache-server
+      - php-api
     networks:
       - internal
       - traefik-proxy
